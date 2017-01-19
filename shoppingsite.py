@@ -32,8 +32,6 @@ app.jinja_env.auto_reload = True
 def index():
     """Return homepage."""
 
-    session['cart'] = {}
-
     return render_template("homepage.html")
 
 
@@ -93,7 +91,12 @@ def add_to_cart(melon_id):
     page and display a confirmation message: 'Melon successfully added to
     cart'."""
 
-    session["cart"]["melon_id"] = session["cart"].get(melon_id, 0) + 1
+    # session['cart'] = session.get('cart', {})
+    if not session.get('cart'):
+            session['cart'] = {}
+
+    session["cart"][melon_id] = session["cart"].get(melon_id, 0) + 1
+    flash("Melon was succesfully added to the cart")
 
     # TODO: Finish shopping cart functionality
 
@@ -106,7 +109,7 @@ def add_to_cart(melon_id):
     # - flash a success message
     # - redirect the user to the cart page
 
-    return "Oops! This needs to be implemented!"
+    return redirect("/cart")
 
 
 @app.route("/login", methods=["GET"])
